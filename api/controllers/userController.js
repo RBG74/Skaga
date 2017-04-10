@@ -5,16 +5,30 @@ var config   = require('../config');
 
 exports.list_all_users = function(req, res, next) {
   User.find({}, function(err, users) {
-    if (err)
+    if(err)
       return next(err);
     res.json(users);
   });
 };
 
+exports.edit_password = function(req, res, next) {
+  var new_password = req.body.newpassword;
+  
+  var user = new User(req.decoded._doc);
+  //user.password = new_password;
+
+  user.update(function(err, user) {
+      if(err)
+          return next(err);
+      res.json(user);
+  });
+};
+
 exports.create_a_user = function(req, res, next) {
+  console.log(req.body);
   var new_user = new User(req.body);
   new_user.save(function(err, user) {
-      if (err)
+      if(err)
           return next(err);
       res.json(user);
   });

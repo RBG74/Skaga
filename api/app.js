@@ -33,8 +33,22 @@ app.use(function(req, res, next) {
     next();
 });
 
+/* Routes */
 var users = require('./routes/userRoutes');
 app.use('/users', users);
+
+/* Error handling */
+app.use(function(err, req, res, next) {
+    if(err){
+        res.status(err.status||500).send({ 
+            success: false, 
+            err
+        });
+        console.log("We no good");
+    } else {
+        console.log("We good");
+    }
+});
 
 var port = process.env.PORT || 3000;
 app.listen(port);
