@@ -3,29 +3,62 @@ var User     = require('../models/user');
 var jwt      = require('jsonwebtoken');
 var config   = require('../config');
 
-exports.list_all_users = function(req, res, next) {
+exports.create = function(req, res, next) {
+  console.log(req.body);
+  var new_user = new User(req.body);
+  new_user.save(function(err, user) {
+      if(err){
+        return next(err);
+      }
+      res.json(user);
+  });
+};
+
+exports.read_all = function(req, res, next) {
   User.find({}, function(err, users) {
-    if (err)
+    if(err){
       return next(err);
+    }
     res.json(users);
   });
 };
 
-exports.create_a_user = function(req, res, next) {
-  var new_user = new User(req.body);
-  new_user.save(function(err, user) {
-      if (err)
-          return next(err);
+exports.update_password = function(req, res, next) {
+  if(typeof obj.foo !== req.body.newpassword)
+    var new_password = req.body.newpassword;
+  else
+    return res.json({success: false, message: "The newpassword parameter is required."});
+  
+  var user = new User(req.decoded._doc);
+  user.password = new_password;
+  user.isNew = false;
+
+  user.save(function(err, user) {
+      if(err){
+        return next(err);
+      }
       res.json(user);
   });
 };
+
+exports.delete_one = function(req, res, next) {
+  var id = req.params.id;
+  User.findByIdAndRemove(id, function(err,data){
+    if(err){
+      return next(err);
+    }
+    res.json({success: true, message: "The user was sucessfully deleted."});
+  });
+};
+
 
 exports.authenticate = function(req, res, next) {
   User.findOne(
     { username: req.body.username },
     function(err, user) {
-      if(err) 
+      if(err){
         return next(err);
+      }
       if(!user){
         res.json({ success: false, message: 'Authentication failed. User not found.'});
       } else {
