@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
             success: false, 
             err
         });
-        console.log("We no good");
+        console.log("We no good, the error was returned.");
     } else {
         console.log("We good");
     }

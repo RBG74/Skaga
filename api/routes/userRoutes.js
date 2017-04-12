@@ -4,9 +4,11 @@ var router = express.Router();
 var userController = require('../controllers/userController');
 var utility = require('./utility');
   
-router.get('/', utility.isTokenValid, userController.list_all_users);
-router.patch('/password', utility.isTokenValid, userController.edit_password);
-router.post('/', userController.create_a_user);
+router.post('/', userController.create);
+router.get('/', utility.isTokenValid, userController.read_all);
+router.patch('/updatepw', utility.isTokenValid, userController.update_password);
+router.delete('/:id', utility.isTokenAdmin, userController.delete_one);
+
 router.post('/authenticate', userController.authenticate);
 
 module.exports = router;

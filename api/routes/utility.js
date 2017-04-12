@@ -8,8 +8,20 @@ exports.isTokenValid = function(req, res, next){
             if(err){
                 return next(err);
             } else {
-                req.decoded = decoded;
-                next();
+                if(req.wantAdminToken){
+                    if(decoded._doc.isAdmin){
+                        req.decoded = decoded;
+                        next();
+                    } else {
+                        return res.status(403).send({
+                            success: false,
+                            message: 'You need an admin token.'
+                        })
+                    }
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
             }
         })
     } else {
@@ -18,4 +30,9 @@ exports.isTokenValid = function(req, res, next){
             message: 'No token provided.' 
         });
     }
-}
+};
+
+exports.isTokenAdmin = function(req, res, next){
+    req.wantAdminToken = true;
+    exports.isTokenValid(req, res, next);
+};
