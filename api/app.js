@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 });
 
 /* Routes */
-app.use(utility.handleStats);
+app.use(utility.handleLog);
 
 var users = require('./routes/userRoutes');
 app.use('/users', users);

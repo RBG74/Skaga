@@ -78,16 +78,16 @@ exports.createAdmin = function(){
     });
 };
 
-exports.handleStats = function(req, res, next){
-    if(debug) console.log('[debug]utility, handleStats');
+exports.handleLog = function(req, res, next){
+    if(debug) console.log('[debug]utility, handleLog');
 
-    var Statistic = require('./models/statistic');
+    var Log = require('./models/log');
     readToken(req, function(err, token){
-        var stat = new Statistic({ route: req.url });
+        var log = new Log({ route: req.url });
         if(token){
-            stat.user = token._doc._id;
+            log.user = token._doc._id;
         }
-        stat.save(function(err){
+        log.save(function(err){
             if(err){
                 return next(err);
             }
