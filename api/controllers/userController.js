@@ -4,7 +4,8 @@ var jwt      = require('jsonwebtoken');
 var config   = require('../config');
 
 exports.create = function(req, res, next) {
-  console.log(req.body);
+  if(debug) console.log('[debug]userController, create');
+
   var new_user = new User(req.body);
   new_user.save(function(err, user) {
       if(err){
@@ -15,6 +16,8 @@ exports.create = function(req, res, next) {
 };
 
 exports.read_all = function(req, res, next) {
+  if(debug) console.log('[debug]userController, read_all');
+
   User.find({}, function(err, users) {
     if(err){
       return next(err);
@@ -23,7 +26,21 @@ exports.read_all = function(req, res, next) {
   });
 };
 
+exports.read_one = function(req, res, next) {
+  if(debug) console.log('[debug]userController, read_one');
+
+  var id = req.params.id;
+  User.findById(id, function(err, user) {
+    if(err){
+      return next(err);
+    }
+    res.json(user);
+  });
+};
+
 exports.update_password = function(req, res, next) {
+  if(debug) console.log('[debug]userController, update_password');
+
   if(typeof obj.foo !== req.body.newpassword)
     var new_password = req.body.newpassword;
   else
@@ -42,6 +59,8 @@ exports.update_password = function(req, res, next) {
 };
 
 exports.delete_one = function(req, res, next) {
+  if(debug) console.log('[debug]userController, delete_one');
+
   var id = req.params.id;
   User.findByIdAndRemove(id, function(err,data){
     if(err){
@@ -53,6 +72,8 @@ exports.delete_one = function(req, res, next) {
 
 
 exports.authenticate = function(req, res, next) {
+  if(debug) console.log('[debug]userController, authenticate');
+
   User.findOne(
     { username: req.body.username },
     function(err, user) {
@@ -76,6 +97,5 @@ exports.authenticate = function(req, res, next) {
           });
         }
       }
-    }
-  )
+  })
 };

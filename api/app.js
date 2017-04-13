@@ -4,25 +4,17 @@ var jwt        = require('jsonwebtoken');
 var bodyParser = require('body-parser');
 
 var config = require('./config');
+var utility = require('./utility');
+
+//debug = config.debug;
+debug = false;
 
 /* Database connection */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
 
-/* Admin creation */
-var User = require('./models/user');
-User.findOne({ 'username': 'Admin' }, function (err, admin) {
-    if(!admin){
-        new User({ 
-            username: 'Admin', 
-            password: 'password',
-            isAdmin: true 
-        }).save(function(err) {
-            if (err) throw err;
-        });
-    }
-});
+utility.createAdmin();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -34,6 +26,8 @@ app.use(function(req, res, next) {
 });
 
 /* Routes */
+app.use(utility.handleStats);
+
 var users = require('./routes/userRoutes');
 app.use('/users', users);
 
