@@ -1,6 +1,5 @@
 var express    = require('express');
 var app        = express();
-var jwt        = require('jsonwebtoken');
 var bodyParser = require('body-parser');
 
 var config = require('./config');
@@ -26,14 +25,16 @@ app.use(function(req, res, next) {
     next();
 });
 
+
+/* Routes */
+var logs = require('./routes/logRoutes');
+app.use('/logs', logs);
+
 //Intercepts all request to log them
 app.use(utility.handleLog);
 
-/* Routes */
 var users = require('./routes/userRoutes');
 app.use('/users', users);
-var logs = require('./routes/logRoutes');
-app.use('/logs', logs);
 
 /* Error handling */
 app.use(function(err, req, res, next) {

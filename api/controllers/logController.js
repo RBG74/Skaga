@@ -6,7 +6,7 @@ var config   = require('../config');
 exports.read_all = function(req, res, next) {
   if(debug) console.log('[debug]logController, read_all');
 
-  Log.find({}, function(err, logs) {
+  Log.find().populate('user', 'username isAdmin').exec(function(err, logs) {
     if(err){
       return next(err);
     }
@@ -42,39 +42,51 @@ exports.read_by_user = function(req, res, next) {
   if(debug) console.log('[debug]logController, read_by_user');
 
   var userid = req.params.id;
-  Log.find({user: userid}).populate('user', 'username isAdmin').exec(function(err, logs) {
-    if(err){
-      return next(err);
-    }
-    if(logs){
-      return res.json({success: true, logs});
-    } else {
-      return res.json({success: true, message: 'There is no log for this user.'});
-    }
-  });
+  if(mongoose.Types.ObjectId.isValid(id)){
+    Log.find({user: userid}).populate('user', 'username isAdmin').exec(function(err, logs) {
+      if(err){
+        return next(err);
+      }
+      if(logs){
+        return res.json({success: true, logs});
+      } else {
+        return res.json({success: true, message: 'There is no log for this user.'});
+      }
+    });
+  } else {
+    return res.json({sucess: false, message: 'Parameter needs to be an id.'});
+  }
 };
 
 exports.delete_one = function(req, res, next) {
   if(debug) console.log('[debug]logController, delete_one');
 
   var id = req.params.id;
-  Log.findByIdAndRemove(id, function(err){
-    if(err){
-      return next(err);
-    }
-    return res.json({success: true, message: "The log was sucessfully deleted."});
-  });
+  if(mongoose.Types.ObjectId.isValid(id)){
+    Log.findByIdAndRemove(id, function(err){
+      if(err){
+        return next(err);
+      }
+      return res.json({success: true, message: "The log was sucessfully deleted."});
+    });
+  } else {
+    return res.json({sucess: false, message: 'Parameter needs to be an id.'});
+  }
 };
 
 exports.delete_by_user = function(req, res, next) {
   if(debug) console.log('[debug]logController, delete_by_user');
 
   var userid = req.params.id;
-  Log.remove({ 'user._id': userid }, function(err){
-    if(err){TODO
-      return next(err);
-    } else {
-      return res.json({ success: true, message: 'This user\'s logs were successfully deleted.' });
-    }
-  });
+  if(mongoose.Types.ObjectId.isValid(userid)){
+    Log.remove({ 'user': userid }, function(err, removed){
+      if(err){
+        return next(err);
+      } else {
+        return res.json({ success: true, message: 'This user\'s logs were successfully deleted.', removed: removed.result.n });
+      }
+    });
+  } else {
+    return res.json({sucess: false, message: 'Parameter needs to be an id.'});
+  }
 };

@@ -7,6 +7,7 @@ exports.create = function(req, res, next) {
   if(debug) console.log('[debug]userController, create');
 
   var new_user = new User(req.body);
+  new_user.isAdmin = false;
   new_user.save(function(err, user) {
       if(err){
         return next(err);
@@ -80,12 +81,16 @@ exports.delete_one = function(req, res, next) {
   if(debug) console.log('[debug]userController, delete_one');
 
   var id = req.params.id;
-  User.findByIdAndRemove(id, function(err,data){
-    if(err){
-      return next(err);
-    }
-    return res.json({success: true, message: "The user was sucessfully deleted."});
-  });
+  if(mongoose.Types.ObjectId.isValid(id)){
+    User.findByIdAndRemove(id, function(err,data){
+      if(err){
+        return next(err);
+      }
+      return res.json({success: true, message: "The user was sucessfully deleted."});
+    });
+  } else {
+    return res.json({sucess: false, message: 'Parameter needs to be an id.'});
+  }
 };
 
 

@@ -82,10 +82,13 @@ exports.handleLog = function(req, res, next){
     if(debug) console.log('[debug]utility, handleLog');
 
     var Log = require('./models/log');
+
     readToken(req, function(err, token){
-        var log = new Log({ route: req.url });
+        var log = new Log({ method: req.method, route: req.url });
         if(token){
             log.user = token._doc._id;
+        } else {
+            log.user = null;
         }
         log.save(function(err){
             if(err){
