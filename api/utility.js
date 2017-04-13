@@ -91,6 +91,7 @@ exports.handleLog = function(req, res, next){
             if(err){
                 return next(err);
             }
+            if(debug) console.log('[debug]utility, handleLog, log saved');
             return next();
         });
     });
