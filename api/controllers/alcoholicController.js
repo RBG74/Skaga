@@ -73,6 +73,66 @@ exports.read_for_auth_user = function(req, res, next) {
   }
 };
 
+exports.update_one = function(req, res, next) {
+  if(debug) console.log('[debug]logController, update_one');
+
+  if(typeof req.body.name !== 'undefined' && typeof req.body.drinks !== 'undefined'){
+    return res.json({success: false, message: 'At least one parameter is needed (name or drinks).'});
+  }
+
+  if(mongoose.Types.ObjectId.isValid(id)){
+    Alcoholic.findOne({ _id:req.params.id }, function(err, alcoholic){
+      if(err){
+        return next(err);
+      }
+      if(req.body.name !== 'undefined'){
+        alcoholic.name = req.body.name;
+      }
+      if(req.body.drinks !== 'undefined'){
+        alcoholic.drinks = req.body.drinks;
+      }
+      alcoholic.save(function(err, alcoholic){
+        if(err){
+          return next(err);
+        }
+        return res.json({success: true, message: 'The alcoholic was successfully updated.'});
+      });
+    });
+  } else {
+    return res.json({sucess: false, message: 'Parameter needs to be an id.'});
+  }
+  
+  var alcoholic = new Alcoholic(req.decoded._doc);
+  alcoholic.isNew = false;
+  alcoholic.save(function(err, alcoholic) {
+    if(err){
+      return next(err);
+    }
+    return res.json({success: true, message: 'The alcoholic was successfully updated.'});
+  });
+};
+
+exports.update_drinks = function(req, res, next) {
+  if(debug) console.log('[debug]logController, update_drinks');
+
+  if(mongoose.Types.ObjectId.isValid(id)){
+    Alcoholic.findOne({ _id:req.params.id }, function(err, alcoholic){
+      if(err){
+        return next(err);
+      }
+      alcoholic.drinksPaid ++;
+      alcoholic.save(function(err, alcoholic){
+        if(err){
+          return next(err);
+        }
+        return res.json({success: true, message: 'The number of drinks paid has been incremented.'});
+      });
+    });
+  } else {
+    return res.json({sucess: false, message: 'Parameter needs to be an id.'});
+  }
+};
+
 exports.delete_one = function(req, res, next) {
   if(debug) console.log('[debug]alcoholicController, delete_one');
 

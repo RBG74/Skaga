@@ -7,7 +7,9 @@ var utility = require('../utility');
 router.post('/:name', utility.isAuth, alcoholicController.create);
 router.get('/', utility.isAuth, alcoholicController.read_all);
 router.get('/:id', utility.isAuth, alcoholicController.read_one);
-router.get('/user/:id', utility.isAuth, alcoholicController.read_for_auth_user);
+router.get('/auth', utility.isAuth, alcoholicController.read_for_auth_user);
+router.patch('/:id', utility.isAuth, alcoholicController.update_one);
+router.patch('/adddrink/:id', utility.isAuth, alcoholicController.update_drinks);
 router.delete('/:id', utility.isAuth, alcoholicController.delete_one);
 router.delete('/', utility.isAuth, alcoholicController.delete_for_auth_user);
 
