@@ -10,7 +10,7 @@ exports.read_all = function(req, res, next) {
     if(err){
       return next(err);
     }
-    if(logs){
+    if(logs[0]){
       return res.json({success: true, logs});
     } else {
       return res.json({success: true, message: 'There is no log.'});
@@ -47,7 +47,7 @@ exports.read_by_user = function(req, res, next) {
       if(err){
         return next(err);
       }
-      if(logs){
+      if(logs[0]){
         return res.json({success: true, logs});
       } else {
         return res.json({success: true, message: 'There is no log for this user.'});
