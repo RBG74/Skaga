@@ -11,6 +11,6 @@ router.get('/auth', utility.isAuth, alcoholicController.read_for_auth_user);
 router.patch('/:id', utility.isAuth, alcoholicController.update_one);
 router.patch('/adddrink/:id', utility.isAuth, alcoholicController.update_drinks);
 router.delete('/:id', utility.isAuth, alcoholicController.delete_one);
-router.delete('/', utility.isAuth, alcoholicController.delete_for_auth_user);
+router.delete('/auth', utility.isAuth, alcoholicController.delete_for_auth_user);
 
 module.exports = router;
