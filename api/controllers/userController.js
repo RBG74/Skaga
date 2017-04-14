@@ -23,7 +23,11 @@ exports.read_all = function(req, res, next) {
     if(err){
       return next(err);
     }
-    return res.json({success: true, users});
+    if(users[0]){
+      return res.json({success: true, users});
+    } else {
+      return res.json({success: true, message:'No user found.'});
+    }
   });
 };
 
