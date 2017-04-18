@@ -1,0 +1,17 @@
+<div class="signup center-block jumbotron">
+  <h1>Inscription</h1>
+  <form role="form" (submit)="signup($event, username.value, password.value)">
+  <div class="form-group">
+    <label for="username">Username: </label>
+    <input type="text" #username class="form-control" id="username" placeholder="Username">
+  </div>
+  <div class="form-group">
+    <label for="password">Mot de passe: </label>
+    <input type="password" #password class="form-control" id="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-default">Inscription</button>
+  <button [routerLink]="['/login']" class="btn btn-default">Retour</button>
+  <button [routerLink]="['/home']" class="btn btn-default">test home</button>
+  
+</form>
+</div>

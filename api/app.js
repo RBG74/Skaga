@@ -1,12 +1,12 @@
 var express    = require('express');
-var app        = express();
+app        = express();
 var bodyParser = require('body-parser');
 
 var config = require('./config');
 var utility = require('./utility');
 
 //debug = config.debug;
-debug = false;
+debug = true;
 
 /* Database connection */
 var mongoose = require('mongoose');

@@ -1,0 +1,7 @@
+<div>
+  <h1>{{title}}</h1>
+  <h2>Bienvenue {{user?.name}}</h2>
+  <img src={{urlGif}} />
+  <button (click)="loadPage()">Et le grand gagnant de ce soir est...</button>
+</div>
+<div *ngIf="victimes != ''"><h2>{{victimes}}</h2></div><!--affichage si seulement la condition est true-->
